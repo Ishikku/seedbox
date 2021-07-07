@@ -1,0 +1,153 @@
+version: "3.3"
+
+services:
+  traefik:
+    image: "traefik:v2.4"
+    container_name: "traefik"
+    restart: "always"
+    network_mode: "host"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=ovh"
+      #- "--certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
+      - "--certificatesresolvers.myresolver.acme.email=axel.ottin@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--pilot.token=f5535d84-95ae-43bb-9305-165816ad401a"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    environment:
+      - "OVH_ENDPOINT=ovh-eu"
+      - "OVH_APPLICATION_KEY=N3IU6tsQRiunSL5z"
+      - "OVH_APPLICATION_SECRET=RiFtWYBme1MFBmmldtmwZ9QehUVU0exw"
+      - "OVH_CONSUMER_KEY=jc3l129ypXhQSK52l8tZFBnc5Fh4ERgs"
+    volumes:
+      - "./traefik/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:      
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.aisuru.fr`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.services.traefik.loadbalancer.server.port=9000"
+      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"
+
+      # Redirect http to https
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web" 
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+  
+  portainer:
+    image: "portainer/portainer-ce"    
+    container_name: "portainer"
+    restart: "always"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./portainer/config:/data"
+    labels:      
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.aisuru.fr`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer.tls.certresolver=myresolver"
+
+
+  plex:
+    image: "ghcr.io/linuxserver/plex"
+    container_name: "plex"
+    network_mode: "host"
+    restart: "always"
+    volumes:
+      - "/mnt/plex-storage/movies:/movies"
+      - "/mnt/plex-storage/torrents:/torrents"
+      - "/mnt/plex-storage/tv-shows:/tv"
+      - "/mnt/plex-storage/config:/config"
+    environment:
+      - "VERSION=latest"
+      - "PUID=0"
+      - "PGID=0"
+    devices:
+      - "/dev/dri:/dev/dri"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.plex.rule=Host(`plex.aisuru.fr`)"
+      - "traefik.http.routers.plex.entrypoints=websecure"
+      - "traefik.http.services.plex.loadbalancer.server.port=32400"
+      - "traefik.http.routers.plex.tls.certresolver=myresolver"
+      - "traefik.http.routers.plex.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"
+
+ 
+  rtorrent:
+    image: "wonderfall/rtorrent-flood"
+    container_name: "rtorrent"
+    restart: "always"
+    tty: "true"
+    network_mode: "service:transmission"
+    depends_on:
+      - transmission
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      - "UID=0"
+      - "GID=0"
+      - "FLOOD_SECRET=sf*Gy'+~6h}R&dB'2T/b@=nCb?A%.a"
+      - "DISABLE_AUTH=false"
+    volumes:
+      - "./flood:/flood-db"
+      - "/mnt/plex-storage/torrents:/data"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.rtorrent.loadbalancer.server.port=3000"
+      - "traefik.http.routers.rtorrent.rule=Host(`flood.aisuru.fr`)"
+      - "traefik.http.routers.rtorrent.entrypoints=websecure"
+      - "traefik.http.routers.rtorrent.service=rtorrent"
+      - "traefik.http.routers.rtorrent.tls.certresolver=myresolver"
+
+  
+  transmission:
+    image: "haugene/transmission-openvpn"
+    container_name: "transmission"
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - "/mnt/plex-storage/torrents:/data"
+    environment:
+      - "TRANSMISSION_WEB_UI=flood-for-transmission"
+      - "OPENVPN_PROVIDER=NORDVPN"
+      - "NORDVPN_COUNTRY=FR"
+      - "NORDVPN_CATEGORY=legacy_p2p"
+      - "NORDVPN_PROTOCOL=tcp"
+      - "OPENVPN_USERNAME=axel.ottin@gmail.com"
+      - "OPENVPN_PASSWORD=16Adf1995Axel*_?*"
+      - "LOCAL_NETWORK=192.168.0.0/24"
+      - "TZ=Europe/Paris"
+      - "ENABLE_UFW=true"
+      - "UFW_ALLOW_GW_NET=true"
+      - "UFW_EXTRA_PORTS=3000"
+      - "PGID=0"
+      - "PUID=0"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
+      - "traefik.http.routers.transmission.rule=Host(`transmission.aisuru.fr`)"
+      - "traefik.http.routers.transmission.entrypoints=websecure"
+      - "traefik.http.routers.transmission.tls.certresolver=myresolver"
+      - "traefik.http.routers.plex.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"

@@ -1,0 +1,9 @@
+{"id":"language","data":"auto","_id":"HPWZlFhoGrjQGshE"}
+{"id":"torrentContextMenuActions","data":[{"id":"start","visible":true},{"id":"stop","visible":true},{"id":"remove","visible":true},{"id":"checkHash","visible":true},{"id":"reannounce","visible":true},{"id":"setTaxonomy","visible":true},{"id":"move","visible":true},{"id":"setTrackers","visible":false},{"id":"torrentDetails","visible":true},{"id":"downloadContents","visible":true},{"id":"downloadMetainfo","visible":false},{"id":"generateMagnet","visible":false},{"id":"setInitialSeeding","visible":true},{"id":"setSequential","visible":false},{"id":"setPriority","visible":false}],"_id":"KPFFVi8cPbwxXRzZ"}
+{"id":"sortTorrents","data":{"property":"upTotal","direction":"desc"},"_id":"KfwMO9isWkiemHsv"}
+{"id":"UITorrentsAddTab","data":"by-url","_id":"Zd3zSWfuITbQIIgg"}
+{"id":"torrentListColumnWidths","data":{"name":244,"percentComplete":76.79998779296875,"downTotal":80,"downRate":100,"upTotal":100,"upRate":100,"eta":63.199951171875,"ratio":54.39990234375,"sizeBytes":72.800048828125,"peers":72,"seeds":69.5999755859375,"dateAdded":100,"dateCreated":100,"directory":100,"hash":100,"isPrivate":100,"message":100,"trackerURIs":100,"tags":100},"_id":"j4nFd0KxtIf7wUFv"}
+{"id":"startTorrentsOnLoad","data":true,"_id":"lSFWhxkjBNrQ6BO2"}
+{"id":"mountPoints","data":["/data"],"_id":"srarce6pc1UviONy"}
+{"id":"torrentDestinations","data":{"Freeleech":"/data/torrents","":"/data/torrents"},"_id":"yXu3EXpIZz5HVaXu"}
+{"id":"deleteTorrentData","data":true,"_id":"zAlzPjjIug5KFo4m"}
