@@ -1,2 +1,0 @@
-{"username":"root","password":"$argon2id$v=19$m=512,t=256,p=1$ghmUgUpb3i9/18J5GHssSQ$P7Fsf2FsSP3JKSDPr3JH/nhj0MqXn3HyZOz7YTyEkCw","client":{"client":"rTorrent","type":"socket","version":1,"socket":"/tmp/rtorrent.sock"},"level":10,"timestamp":1624896769,"_id":"Sfa2iA1Rzsc77yLr"}
-{"$$indexCreated":{"fieldName":"username","unique":true,"sparse":false}}

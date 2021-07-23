@@ -14,7 +14,6 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
       - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=ovh"
-      #- "--certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
       - "--certificatesresolvers.myresolver.acme.email=axel.ottin@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--pilot.token=f5535d84-95ae-43bb-9305-165816ad401a"
@@ -68,9 +67,7 @@ services:
     network_mode: "host"
     restart: "always"
     volumes:
-      - "/mnt/plex-storage/movies:/movies"
-      - "/mnt/plex-storage/torrents:/torrents"
-      - "/mnt/plex-storage/tv-shows:/tv"
+      - "/mnt/plex-storage/data/media:/data/media"
       - "/mnt/plex-storage/config:/config"
     environment:
       - "VERSION=latest"
@@ -103,13 +100,14 @@ services:
       - "GID=0"
       - "FLOOD_SECRET=sf*Gy'+~6h}R&dB'2T/b@=nCb?A%.a"
       - "DISABLE_AUTH=false"
+      - "RTORRENT_SCGI=5000"
     volumes:
-      - "./flood:/flood-db"
-      - "/mnt/plex-storage/torrents:/data"
+      - "./rtorrent-flood:/flood-db"
+      - "/mnt/plex-storage/data/torrents:/data/torrents"
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.rtorrent.loadbalancer.server.port=3000"
-      - "traefik.http.routers.rtorrent.rule=Host(`flood.aisuru.fr`)"
+      - "traefik.http.routers.rtorrent.rule=Host(`rtorrent.aisuru.fr`)"
       - "traefik.http.routers.rtorrent.entrypoints=websecure"
       - "traefik.http.routers.rtorrent.service=rtorrent"
       - "traefik.http.routers.rtorrent.tls.certresolver=myresolver"
@@ -119,9 +117,11 @@ services:
     image: "haugene/transmission-openvpn"
     container_name: "transmission"
     cap_add:
-      - NET_ADMIN
+      - "NET_ADMIN"
     volumes:
-      - "/mnt/plex-storage/torrents:/data"
+      - "/mnt/ssd-storage/docker/seedbox/transmission/watch:/data/watch"
+      - "/mnt/plex-storage/data/torrents:/data/torrents"
+      - "/mnt/ssd-storage/docker/seedbox/transmission/home:/data/transmission-home"
     environment:
       - "TRANSMISSION_WEB_UI=flood-for-transmission"
       - "OPENVPN_PROVIDER=NORDVPN"
@@ -134,20 +134,72 @@ services:
       - "TZ=Europe/Paris"
       - "ENABLE_UFW=true"
       - "UFW_ALLOW_GW_NET=true"
-      - "UFW_EXTRA_PORTS=3000"
+      - "UFW_EXTRA_PORTS=3000,7878,9117,49184"
       - "PGID=0"
       - "PUID=0"
+      - "TRANSMISSION_DOWNLOAD_DIR=/data/torrents"
+      - "TRANSMISSION_INCOMPLETE_DIR=/data/torrents"
     logging:
       driver: json-file
       options:
         max-size: 10m
     ports:
       - "3000:3000"
+      - "7878:7878"
+      - "9117:9117"
+      - "49184:49184"
+      - "49184:49184/udp"
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.transmission.loadbalancer.server.port=9091"
-      - "traefik.http.routers.transmission.rule=Host(`transmission.aisuru.fr`)"
+      - "traefik.http.routers.transmission.rule=Host(`flood.aisuru.fr`)"
       - "traefik.http.routers.transmission.entrypoints=websecure"
       - "traefik.http.routers.transmission.tls.certresolver=myresolver"
-      - "traefik.http.routers.plex.middlewares=auth"
+      - "traefik.http.routers.transmission.middlewares=auth"
       - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"
+
+
+  jackett:
+    image: "ghcr.io/linuxserver/jackett"
+    container_name: "jackett"
+    restart: "always"
+    network_mode: "service:transmission"
+    depends_on:
+      - transmission
+    volumes:
+      - "./jackett/config:/config"
+      - "/mnt/plex-storage/data/torrents:/downloads"
+    environment:
+      - "TZ=Europe/Paris"
+      - "AUTO_UPDATE=true"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.jackett.loadbalancer.server.port=9117"
+      - "traefik.http.routers.jackett.rule=Host(`jackett.aisuru.fr`)"
+      - "traefik.http.routers.jackett.entrypoints=websecure"
+      - "traefik.http.routers.jackett.tls.certresolver=myresolver"
+      - "traefik.http.routers.jackett.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"
+  
+
+  radarr:
+    image: "ghcr.io/linuxserver/radarr"
+    container_name: "radarr"
+    restart: "always"
+    network_mode: "service:transmission"
+    depends_on:
+      - transmission
+    volumes:
+      - "./radarr/config:/config"
+      - "/mnt/plex-storage/data:/data"
+    environment:
+      - "PGID=0"
+      - "PUID=0"
+      - "TZ=Europe/Paris"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.aisuru.fr`)"
+      - "traefik.http.routers.radarr.entrypoints=websecure"
+      - "traefik.http.routers.radarr.tls.certresolver=myresolver"
+    

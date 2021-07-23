@@ -1,0 +1,38 @@
+[
+  {
+    "id": "sitelink",
+    "type": "inputstring",
+    "name": "Site Link",
+    "value": "https://iptorrents.com/"
+  },
+  {
+    "id": "cookie",
+    "type": "inputstring",
+    "name": "Cookie",
+    "value": "cf_clearance=6acc1039d21e3cf4b8a30b4c46a4a9aa0c252587-1624899557-0-150; uid=2033923; pass=d5deX7bDN9JSEMAbrVGZleUfnnQKAPIA"
+  },
+  {
+    "id": "cookieheader",
+    "type": "hiddendata",
+    "name": "CookieHeader",
+    "value": "cf_clearance=6acc1039d21e3cf4b8a30b4c46a4a9aa0c252587-1624899557-0-150; uid=2033923; pass=d5deX7bDN9JSEMAbrVGZleUfnnQKAPIA"
+  },
+  {
+    "id": "lasterror",
+    "type": "hiddendata",
+    "name": "LastError",
+    "value": null
+  },
+  {
+    "id": "searchfreeleechonly",
+    "type": "inputbool",
+    "name": "Search freeleech only",
+    "value": false
+  },
+  {
+    "id": "tags",
+    "type": "inputtags",
+    "name": "Tags",
+    "value": ""
+  }
+]
