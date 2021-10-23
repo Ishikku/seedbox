@@ -1842,3 +1842,58 @@
 2021-10-23 19:05:22 - INFO    :: Thread-2 : Tautulli NotificationHandler :: Notification thread exiting...
 2021-10-23 19:05:22 - INFO    :: Thread-3 : Tautulli NotificationHandler :: Notification thread exiting...
 2021-10-23 19:05:22 - INFO    :: MainThread : Tautulli is shutting down...
+2021-10-23 19:13:40 - INFO    :: MainThread : Starting Tautulli v2.7.7
+2021-10-23 19:13:40 - INFO    :: MainThread : [Docker] Linux 5.10.42+truenas (#1 SMP Mon Jun 21 17:57:15 UTC 2021)
+2021-10-23 19:13:40 - INFO    :: MainThread : Europe/Paris (UTC+0200)
+2021-10-23 19:13:40 - INFO    :: MainThread : Python 3.8.10 (default, May  6 2021, 00:05:59) [GCC 10.2.1 20201203]
+2021-10-23 19:13:40 - INFO    :: MainThread : Program Dir: /app/tautulli
+2021-10-23 19:13:40 - INFO    :: MainThread : Config File: /config/config.ini
+2021-10-23 19:13:40 - INFO    :: MainThread : Database File: /config/tautulli.db
+2021-10-23 19:13:40 - INFO    :: MainThread : Checking if the database upgrades are required...
+2021-10-23 19:13:40 - INFO    :: MainThread : Checking if configuration upgrades are required...
+2021-10-23 19:13:40 - INFO    :: MainThread : Retrieving latest version information from GitHub
+2021-10-23 19:13:40 - DEBUG   :: MainThread : Requesting URL via GET method: https://api.github.com/repos/Tautulli/Tautulli/commits/master
+2021-10-23 19:13:40 - DEBUG   :: MainThread : Latest version is 5f22ad26ad52fbf7881aac988a59853a2bde9887
+2021-10-23 19:13:40 - INFO    :: MainThread : Comparing currently installed version with latest GitHub version
+2021-10-23 19:13:40 - DEBUG   :: MainThread : Requesting URL via GET method: https://api.github.com/repos/Tautulli/Tautulli/compare/v2.7.7...5f22ad26ad52fbf7881aac988a59853a2bde9887
+2021-10-23 19:13:40 - DEBUG   :: MainThread : In total, 0 commits behind
+2021-10-23 19:13:40 - INFO    :: MainThread : Tautulli is up to date
+2021-10-23 19:13:40 - INFO    :: MainThread : Tautulli Config :: Writing configuration to file
+2021-10-23 19:13:40 - INFO    :: Thread-1 : Tautulli PlexTV :: Requesting resources for server...
+2021-10-23 19:13:40 - INFO    :: MainThread : Tautulli NotificationHandler :: Starting background notification handler (2 threads).
+2021-10-23 19:13:40 - INFO    :: MainThread : Tautulli WebStart :: Initializing Tautulli web server...
+2021-10-23 19:13:40 - INFO    :: MainThread : Tautulli WebStart :: Web server authentication is enabled: Tautulli admin (username is 'root') and Plex admin.
+2021-10-23 19:13:40 - INFO    :: MainThread : Tautulli WebStart :: Thread Pool Size: 10.
+2021-10-23 19:13:40 - INFO    :: MainThread : Tautulli WebStart :: Starting Tautulli web server on http://0.0.0.0:8181/
+2021-10-23 19:13:41 - INFO    :: MainThread : [23/Oct/2021:19:13:41] ENGINE Serving on http://0.0.0.0:8181
+2021-10-23 19:13:41 - INFO    :: MainThread : Tautulli is ready!
+2021-10-23 19:13:41 - INFO    :: Thread-1 : Tautulli Config :: Writing configuration to file
+2021-10-23 19:13:41 - INFO    :: Thread-1 : Tautulli PlexTV :: Server URL retrieved.
+2021-10-23 19:13:41 - INFO    :: Thread-1 : Tautulli PlexTV :: Selected server: plex.aisuru.fr (https://192-168-1-36.5c46f701c56a42948e33712c32f3e3d2.plex.direct:32400) (Linux - Version 1.24.5.5160-19d8ce86f)
+2021-10-23 19:13:41 - INFO    :: Thread-1 : Tautulli Config :: Writing configuration to file
+2021-10-23 19:13:41 - ERROR   :: Thread-1 : Failed to access uri endpoint /status/sessions. Connection error: HTTPSConnectionPool(host='192-168-1-36.5c46f701c56a42948e33712c32f3e3d2.plex.direct', port=32400): Max retries exceeded with url: /status/sessions (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7ff12ad23f10>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2021-10-23 19:13:41 - WARNING :: Thread-1 : Tautulli Pmsconnect :: Unable to parse XML for get_current_activity: 'NoneType' object has no attribute 'getElementsByTagName'.
+2021-10-23 19:13:41 - DEBUG   :: Thread-1 : Tautulli Monitor :: Checking for active streams.
+2021-10-23 19:13:41 - DEBUG   :: Thread-1 : Tautulli Monitor :: Unable to read session list.
+2021-10-23 19:13:41 - INFO    :: Thread-15 : Tautulli WebSocket :: Opening secure websocket.
+2021-10-23 19:13:41 - INFO    :: Thread-1 : Tautulli Users :: Requesting users list refresh...
+2021-10-23 19:13:41 - ERROR   :: Thread-15 : Tautulli WebSocket :: [Errno 111] Connection refused.
+2021-10-23 19:13:41 - INFO    :: Thread-15 : Scheduled background task: Check GitHub for updates
+2021-10-23 19:13:41 - INFO    :: Thread-15 : Scheduled background task: Optimize Tautulli database
+2021-10-23 19:13:41 - INFO    :: Thread-15 : Scheduled background task: Backup Tautulli database
+2021-10-23 19:13:41 - INFO    :: Thread-15 : Scheduled background task: Backup Tautulli config
+2021-10-23 19:13:41 - INFO    :: Thread-15 : Scheduled background task: Check for server response
+2021-10-23 19:13:41 - DEBUG   :: Thread-15 : Tautulli WebSocket :: Leaving thread.
+2021-10-23 19:13:41 - INFO    :: Thread-1 : Tautulli Users :: Users list refreshed.
+2021-10-23 19:13:41 - INFO    :: Thread-1 : Tautulli Libraries :: Requesting libraries list refresh...
+2021-10-23 19:13:41 - ERROR   :: Thread-1 : Failed to access uri endpoint /library/sections. Connection error: HTTPSConnectionPool(host='192-168-1-36.5c46f701c56a42948e33712c32f3e3d2.plex.direct', port=32400): Max retries exceeded with url: /library/sections (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7ff12ad2ebe0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2021-10-23 19:13:41 - WARNING :: Thread-1 : Tautulli Pmsconnect :: Unable to parse XML for get_libraries_list: 'NoneType' object has no attribute 'getElementsByTagName'.
+2021-10-23 19:13:41 - WARNING :: Thread-1 : Tautulli Libraries :: Unable to refresh libraries list.
+2021-10-23 19:14:11 - DEBUG   :: Thread-16 : Tautulli Monitor :: Checking for active streams.
+2021-10-23 19:14:11 - INFO    :: Thread-17 : Tautulli WebSocket :: Opening secure websocket.
+2021-10-23 19:14:11 - INFO    :: Thread-17 : Tautulli WebSocket :: Ready
+2021-10-23 19:14:11 - INFO    :: Thread-17 : Tautulli WebSocket :: The Plex Media Server is back up.
+2021-10-23 19:14:11 - INFO    :: Thread-17 : Scheduled background task: Refresh Plex server URLs
+2021-10-23 19:14:11 - INFO    :: Thread-17 : Scheduled background task: Refresh users list
+2021-10-23 19:14:11 - INFO    :: Thread-17 : Scheduled background task: Refresh libraries list
+2021-10-23 19:14:11 - INFO    :: Thread-17 : Removed background task: Check for server response

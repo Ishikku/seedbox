@@ -3906,3 +3906,22 @@ System.Net.Http.HttpRequestException: No route to host (172.27.0.1:32400)
 2021-10-23 18:30:00.081 +02:00 [Debug] Trigger instruction : NoInstruction
 2021-10-23 18:30:23.317 +02:00 [Debug] Batch acquisition of 0 triggers
 2021-10-23 18:30:48.864 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:13:46.159 +02:00 [Information] Default Quartz.NET properties loaded from embedded resource file
+2021-10-23 19:13:46.198 +02:00 [Debug] TaskSchedulingThreadPool configured with max concurrency of 10 and TaskScheduler ThreadPoolTaskScheduler.
+2021-10-23 19:13:46.201 +02:00 [Information] Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+2021-10-23 19:13:46.203 +02:00 [Information] Quartz Scheduler v."3.1.0.0" created.
+2021-10-23 19:13:46.203 +02:00 [Information] RAMJobStore initialized.
+2021-10-23 19:13:46.205 +02:00 [Information] Scheduler meta-data: Quartz Scheduler (v3.1.0.0) 'DefaultQuartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'Quartz.Core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'Quartz.Simpl.DefaultThreadPool' - with 10 threads.
+  Using job-store 'Quartz.Simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2021-10-23 19:13:46.205 +02:00 [Information] Quartz scheduler 'DefaultQuartzScheduler' initialized
+2021-10-23 19:13:46.205 +02:00 [Information] Quartz scheduler version: 3.1.0.0
+2021-10-23 19:13:46.206 +02:00 [Information] JobFactory set to: Ombi.Schedule.IoCJobFactory
+2021-10-23 19:13:46.252 +02:00 [Information] Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.
+2021-10-23 19:13:46.255 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:14:13.411 +02:00 [Debug] Batch acquisition of 0 triggers

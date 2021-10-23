@@ -8966,3 +8966,19 @@
 2021-10-23 19:00:36.2|Info|RssSyncService|Starting RSS Sync
 2021-10-23 19:00:37.1|Info|DownloadDecisionMaker|Processing 100 releases
 2021-10-23 19:00:37.3|Info|RssSyncService|RSS Sync Completed. Reports found: 100, Reports grabbed: 0
+2021-10-23 19:13:44.4|Info|Bootstrap|Starting Sonarr - /app/sonarr/bin/Sonarr.exe - Version 3.0.6.1342
+2021-10-23 19:13:44.9|Info|AppFolderInfo|Data directory is being overridden to [/config]
+2021-10-23 19:13:44.9|Info|Router|Application mode: Interactive
+2021-10-23 19:13:45.1|Info|MigrationLogger|*** Checking database for required migrations data source=/config/sonarr.db;cache size=-10000;datetimekind=Utc;journal mode=Wal;pooling=True;version=3 ***
+2021-10-23 19:13:45.2|Info|MigrationLogger|*** 159: add_indexer_tags migrating ***
+2021-10-23 19:13:45.2|Info|add_indexer_tags|Starting migration to 159
+2021-10-23 19:13:45.3|Info|MigrationLogger|*** 160: rename_blacklist_to_blocklist migrating ***
+2021-10-23 19:13:45.3|Info|rename_blacklist_to_blocklist|Starting migration to 160
+2021-10-23 19:13:45.3|Info|MigrationLogger|*** Checking database for required migrations data source=/config/logs.db;cache size=-10000;datetimekind=Utc;journal mode=Wal;pooling=True;version=3 ***
+2021-10-23 19:13:45.3|Info|MigrationLogger|*** 159: add_indexer_tags migrating ***
+2021-10-23 19:13:45.3|Info|add_indexer_tags|Starting migration to 159
+2021-10-23 19:13:45.3|Info|MigrationLogger|*** 160: rename_blacklist_to_blocklist migrating ***
+2021-10-23 19:13:45.3|Info|rename_blacklist_to_blocklist|Starting migration to 160
+2021-10-23 19:13:45.5|Info|OwinHostController|Listening on the following URLs:
+2021-10-23 19:13:45.5|Info|OwinHostController|  http://*:8989/
+2021-10-23 19:13:45.9|Info|SonarrBootstrapper|Starting Web Server
