@@ -8982,3 +8982,6 @@
 2021-10-23 19:13:45.5|Info|OwinHostController|Listening on the following URLs:
 2021-10-23 19:13:45.5|Info|OwinHostController|  http://*:8989/
 2021-10-23 19:13:45.9|Info|SonarrBootstrapper|Starting Web Server
+2021-10-23 19:15:47.0|Info|RssSyncService|Starting RSS Sync
+2021-10-23 19:15:47.8|Info|DownloadDecisionMaker|Processing 100 releases
+2021-10-23 19:15:48.1|Info|RssSyncService|RSS Sync Completed. Reports found: 100, Reports grabbed: 0

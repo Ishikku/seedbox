@@ -3925,3 +3925,23 @@ System.Net.Http.HttpRequestException: No route to host (172.27.0.1:32400)
 2021-10-23 19:13:46.252 +02:00 [Information] Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.
 2021-10-23 19:13:46.255 +02:00 [Debug] Batch acquisition of 0 triggers
 2021-10-23 19:14:13.411 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:14:39.119 +02:00 [Debug] Batch acquisition of 1 triggers
+2021-10-23 19:15:00.004 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:15:00.019 +02:00 [Debug] Calling Execute on job DVR.IRadarrSync
+2021-10-23 19:15:00.719 +02:00 [Debug] Batch acquisition of 1 triggers
+2021-10-23 19:15:00.720 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:15:00.720 +02:00 [Debug] Calling Execute on job DVR.IArrAvailabilityChecker
+2021-10-23 19:15:00.722 +02:00 [Debug] Trigger instruction : NoInstruction
+2021-10-23 19:15:01.049 +02:00 [Debug] Trigger instruction : DeleteTrigger
+2021-10-23 19:15:01.049 +02:00 [Debug] Deleting trigger
+2021-10-23 19:15:24.270 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:15:49.799 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:16:19.688 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:16:43.018 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:17:09.734 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:17:32.761 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:17:59.712 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:18:28.442 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:18:55.296 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:19:18.348 +02:00 [Debug] Batch acquisition of 0 triggers
+2021-10-23 19:19:45.742 +02:00 [Debug] Batch acquisition of 0 triggers

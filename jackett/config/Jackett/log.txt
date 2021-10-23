@@ -27205,3 +27205,4 @@ DESC : Annonce changement de nom de domaine.
 2021-10-23 19:14:17.3560 Info Torznab search in IPTorrents => Found 100 releases 
 2021-10-23 19:14:17.6580 Info CardigannIndexer (yggtorrent): Relogin required 
 2021-10-23 19:14:20.0479 Info Torznab search in YGGtorrent => Found 34 releases 
+2021-10-23 19:15:47.8024 Info Torznab search in IPTorrents => Found 100 releases 
