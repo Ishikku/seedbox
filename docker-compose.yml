@@ -1,6 +1,7 @@
 version: "3.3"
 
 services:
+  # NETWORK MANAGEMENT
   traefik:
     image: "traefik:v2.4"
     container_name: "traefik"
@@ -45,7 +46,8 @@ services:
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
-  
+
+  # CONTAINER MANAGEMENT
   portainer:
     image: "portainer/portainer-ce"    
     container_name: "portainer"
@@ -61,6 +63,7 @@ services:
       - "traefik.http.routers.portainer.tls.certresolver=myresolver"
 
 
+  # MEDIA SERVER
   plex:
     image: "ghcr.io/linuxserver/plex"
     container_name: "plex"
@@ -84,7 +87,49 @@ services:
       - "traefik.http.routers.plex.middlewares=auth"
       - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"
 
- 
+
+  # PLEX CONTENT REQUESTS
+  ombi:
+    image: "ghcr.io/linuxserver/ombi"
+    container_name: "ombi"
+    restart: "always"
+    environment:
+      - "PUID=0"
+      - "PGID=0"
+      - "TZ=Europe/Paris"
+    network_mode: "service:transmission"
+    depends_on:
+      - transmission
+    volumes:
+      - "./ombi/config:/config"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.ombi.loadbalancer.server.port=3579"
+      - "traefik.http.routers.ombi.rule=Host(`ombi.aisuru.fr`)"
+      - "traefik.http.routers.ombi.entrypoints=websecure"
+      - "traefik.http.routers.ombi.tls.certresolver=myresolver"
+
+
+  # PLEX STATS & ADMIN
+  tautulli:
+    image: "ghcr.io/linuxserver/tautulli"
+    container_name: "tautulli"
+    restart: "always"
+    environment:
+      - "PUID=0"
+      - "PGID=0"
+      - "TZ=Europe/Paris"
+    volumes:
+      - "./tautulli/config:/config"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.tautulli.loadbalancer.server.port=8181"
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.aisuru.fr`)"
+      - "traefik.http.routers.tautulli.entrypoints=websecure"
+      - "traefik.http.routers.tautulli.tls.certresolver=myresolver"
+
+
+  # TORRENTS DOWNLOADER WITH RSS
   rtorrent:
     image: "wonderfall/rtorrent-flood"
     container_name: "rtorrent"
@@ -112,7 +157,8 @@ services:
       - "traefik.http.routers.rtorrent.service=rtorrent"
       - "traefik.http.routers.rtorrent.tls.certresolver=myresolver"
 
-  
+
+  # TORRENT DOWNLOADER WITH VPN
   transmission:
     image: "haugene/transmission-openvpn"
     container_name: "transmission"
@@ -134,7 +180,7 @@ services:
       - "TZ=Europe/Paris"
       - "ENABLE_UFW=true"
       - "UFW_ALLOW_GW_NET=true"
-      - "UFW_EXTRA_PORTS=3000,7878,9117,49184"
+      - "UFW_EXTRA_PORTS=3000,3579,7878,8989,9117,49184"
       - "PGID=0"
       - "PUID=0"
       - "TRANSMISSION_DOWNLOAD_DIR=/data/torrents"
@@ -145,7 +191,9 @@ services:
         max-size: 10m
     ports:
       - "3000:3000"
+      - "3579:3579"
       - "7878:7878"
+      - "8989:8989"
       - "9117:9117"
       - "49184:49184"
       - "49184:49184/udp"
@@ -159,6 +207,7 @@ services:
       - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"
 
 
+  # TRACKER INDEXER
   jackett:
     image: "ghcr.io/linuxserver/jackett"
     container_name: "jackett"
@@ -172,6 +221,8 @@ services:
     environment:
       - "TZ=Europe/Paris"
       - "AUTO_UPDATE=true"
+      - "PGID=0"
+      - "PUID=0"
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.jackett.loadbalancer.server.port=9117"
@@ -180,8 +231,9 @@ services:
       - "traefik.http.routers.jackett.tls.certresolver=myresolver"
       - "traefik.http.routers.jackett.middlewares=auth"
       - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"
-  
 
+
+  # MOVIES MONITOR
   radarr:
     image: "ghcr.io/linuxserver/radarr"
     container_name: "radarr"
@@ -202,4 +254,43 @@ services:
       - "traefik.http.routers.radarr.rule=Host(`radarr.aisuru.fr`)"
       - "traefik.http.routers.radarr.entrypoints=websecure"
       - "traefik.http.routers.radarr.tls.certresolver=myresolver"
-    
+
+
+  # TV SHOWS AND ANIMES MONITOR
+  sonarr:
+    image: "ghcr.io/linuxserver/sonarr"
+    container_name: "sonarr"
+    restart: "always"
+    network_mode: "service:transmission"
+    depends_on:
+      - transmission
+    volumes:
+      - "./sonarr/config:/config"
+      - "/mnt/plex-storage/data:/data"
+    environment:
+      - "PGID=0"
+      - "PUID=0"
+      - "TZ=Europe/Paris"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.aisuru.fr`)"
+      - "traefik.http.routers.sonarr.entrypoints=websecure"
+      - "traefik.http.routers.sonarr.tls.certresolver=myresolver"
+
+  # Graph and monitoring
+  grafana:
+    image: "grafana/grafana:latest"
+    container_name: "grafana"
+    restart: "always"
+    environment:
+      - "GF_SECURITY_ADMIN_USER=root"
+      - "GF_SECURITY_ADMIN_PASSWORD=Yokidoki59*"
+      - "GF_USERS_ALLOW_SIGN_UP=false"
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.aisuru.fr`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
