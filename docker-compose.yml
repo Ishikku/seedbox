@@ -93,15 +93,17 @@ services:
     image: "ghcr.io/linuxserver/ombi"
     container_name: "ombi"
     restart: "always"
+    network_mode: "service:transmission"
+    depends_on:
+      - transmission
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=1"
+    volumes:
+      - "./ombi/config:/config"
     environment:
       - "PUID=0"
       - "PGID=0"
       - "TZ=Europe/Paris"
-    network_mode: "service:transmission"
-    depends_on:
-      - transmission
-    volumes:
-      - "./ombi/config:/config"
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.ombi.loadbalancer.server.port=3579"
@@ -138,6 +140,8 @@ services:
     network_mode: "service:transmission"
     depends_on:
       - transmission
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=1"
     security_opt:
       - "no-new-privileges:true"
     environment:
@@ -162,8 +166,11 @@ services:
   transmission:
     image: "haugene/transmission-openvpn"
     container_name: "transmission"
+    restart: "always"
     cap_add:
       - "NET_ADMIN"
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=1"
     volumes:
       - "/mnt/ssd-storage/docker/seedbox/transmission/watch:/data/watch"
       - "/mnt/plex-storage/data/torrents:/data/torrents"
@@ -180,7 +187,7 @@ services:
       - "TZ=Europe/Paris"
       - "ENABLE_UFW=true"
       - "UFW_ALLOW_GW_NET=true"
-      - "UFW_EXTRA_PORTS=3000,3579,7878,8989,9117,49184"
+      - "UFW_EXTRA_PORTS=3000,3579,7878,8191,8989,9117,49184"
       - "PGID=0"
       - "PUID=0"
       - "TRANSMISSION_DOWNLOAD_DIR=/data/torrents"
@@ -193,6 +200,7 @@ services:
       - "3000:3000"
       - "3579:3579"
       - "7878:7878"
+      - "8191:8191"
       - "8989:8989"
       - "9117:9117"
       - "49184:49184"
@@ -215,6 +223,8 @@ services:
     network_mode: "service:transmission"
     depends_on:
       - transmission
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=1"
     volumes:
       - "./jackett/config:/config"
       - "/mnt/plex-storage/data/torrents:/downloads"
@@ -232,6 +242,30 @@ services:
       - "traefik.http.routers.jackett.middlewares=auth"
       - "traefik.http.middlewares.auth.basicauth.users=root:$$2y$$05$$V4wO7wcdULhVtR1Q6g/oz.HgBfYCx97eBu8PuyIA/2Mkh7o/aCfVC"
 
+  # CAPTCHA SOLVER
+  flaresolverr:
+    image: "ghcr.io/flaresolverr/flaresolverr:latest"
+    container_name: "flaresolverr"
+    restart: "always"
+    network_mode: "service:transmission"
+    depends_on:
+      - transmission
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=1"
+    environment:
+      #- "CAPTCHA_SOLVER=harvester"
+      #- "HARVESTER_ENDPOINT=https://127.0.0.1:5000/token"
+      - "LOG_LEVEL=debug"
+      - "LOG_HTML=true"
+      - "TZ=Europe/Paris"
+    #ports:
+      #- "8191:8191"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.flaresolverr.loadbalancer.server.port=8191"
+      - "traefik.http.routers.flaresolverr.rule=Host(`flaresolverr.aisuru.fr`)"
+      - "traefik.http.routers.flaresolverr.entrypoints=websecure"
+      - "traefik.http.routers.flaresolverr.tls.certresolver=myresolver"
 
   # MOVIES MONITOR
   radarr:
@@ -241,6 +275,8 @@ services:
     network_mode: "service:transmission"
     depends_on:
       - transmission
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=1"
     volumes:
       - "./radarr/config:/config"
       - "/mnt/plex-storage/data:/data"
@@ -255,7 +291,6 @@ services:
       - "traefik.http.routers.radarr.entrypoints=websecure"
       - "traefik.http.routers.radarr.tls.certresolver=myresolver"
 
-
   # TV SHOWS AND ANIMES MONITOR
   sonarr:
     image: "ghcr.io/linuxserver/sonarr"
@@ -264,6 +299,8 @@ services:
     network_mode: "service:transmission"
     depends_on:
       - transmission
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=1"
     volumes:
       - "./sonarr/config:/config"
       - "/mnt/plex-storage/data:/data"
@@ -287,10 +324,43 @@ services:
       - "GF_SECURITY_ADMIN_USER=root"
       - "GF_SECURITY_ADMIN_PASSWORD=Yokidoki59*"
       - "GF_USERS_ALLOW_SIGN_UP=false"
-
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
       - "traefik.http.routers.grafana.rule=Host(`grafana.aisuru.fr`)"
       - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+
+  # Cloud
+  nextcloud_db:
+    image: "mariadb"
+    container_name: "nextcloud_db"
+    restart: "always"
+    command: "--transaction-isolation=READ-COMMITTED --binlog-format=ROW"
+    volumes:
+      - "./nextcloud/db:/var/lib/mysql"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=$NEXTCLOUD_MYSQL_ROOT_PASSWORD"  # Mot de passe de l'utilisateur root de mariadb
+      - "MYSQL_DATABASE=$NEXTCLOUD_MYSQL_DATABASE"  # Nom de la base de données à créer à l'initialisation du conteneur
+      - "MYSQL_USER=$NEXTCLOUD_MYSQL_USER"  # Nom de l'utilisateur de la base de données créée
+      - "MYSQL_PASSWORD=$NEXTCLOUD_MYSQL_PASSWORD"  # Mot de passe de l'utilisateur créé
+
+  nextcloud_app:
+    image: "nextcloud"
+    container_name: "nextcloud_app"
+    restart: "always"
+    links:
+      - nextcloud_db
+    volumes:
+      - "./nextcloud/data:/var/www/html"
+    environment:
+      - "MYSQL_HOST=nextcloud_db"  # Nom du conteneur de la base de données
+      - "MYSQL_DATABASE=$NEXTCLOUD_MYSQL_DATABASE"  # Nom de la base de données
+      - "MYSQL_USER=$NEXTCLOUD_MYSQL_USER"  # Nom de l'utilisateur de la base de données
+      - "MYSQL_PASSWORD=$NEXTCLOUD_MYSQL_PASSWORD"  # Mot de passe de l'utilisateur de la base de données
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.aisuru.fr`)"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.tls.certresolver=myresolver"

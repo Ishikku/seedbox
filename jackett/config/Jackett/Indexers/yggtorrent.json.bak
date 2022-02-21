@@ -3,19 +3,19 @@
     "id": "sitelink",
     "type": "inputstring",
     "name": "Site Link",
-    "value": "https://www3.yggtorrent.nz/"
+    "value": "https://www3.yggtorrent.re/"
   },
   {
     "id": "cookieheader",
     "type": "hiddendata",
     "name": "CookieHeader",
-    "value": "ygg_=b9n3g5jblolumhjpgl8gpneiaqq295v9"
+    "value": "cf_clearance=gs33g1oZ8FpRoSQ7EWQER3vp8O9jfD8aavuXnJjQALw-1645406838-0-150; ygg_=v1indairnbs9fi8kubtodhq12meqi5c2; cf_chl_2=34ea2111bd4cc25; cf_chl_prog=x11"
   },
   {
     "id": "lasterror",
     "type": "hiddendata",
     "name": "LastError",
-    "value": "Exception (yggtorrent): Login failed: No form found on https://www3.yggtorrent.nz/ using form selector #user-login: Parse error"
+    "value": null
   },
   {
     "id": "username",
@@ -27,7 +27,7 @@
     "id": "password",
     "type": "inputstring",
     "name": "Password",
-    "value": "CfDJ8ABeU5c_0ExFgoDo7kkMkV1uvXWreXsuOyy5AF9flZBdWvm3tMbUU4SmUrJct_vaMRxmHaXKluPI3FYiaXeXYwgtmkf8ICktj-s9I3h-pnJajtTb8f7JNYYJbCOLDnNJbw"
+    "value": "CfDJ8GN7ueyIrTNJjy9IrZNBbKNIct8vSb89-LNT1SCUX-qXgQxeqo3e-IXOLcf4IB2XJU_A280fPH9w3BVes80-xdoN4842yxFiTUo_txrLgFNtV5EkBXAVWBjBMdocWPPcGQ"
   },
   {
     "id": "catégorie",
